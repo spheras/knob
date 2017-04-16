@@ -101,6 +101,13 @@ The component emit an event at every change value of the knob. You can listen to
 [MIT](https://tldrlegal.com/license/mit-license)
 
 ## Examples
+Remember: These skins are just examples, you can do your own skin and share with us! Skins have at least 2 parts, preferably using SVG format:
+- The Base Skin, which is static (doesn't rotate)
+- The Front Skin, which is linked with the internal knob div, and is rotating
+
+Anyway, if you want to use one of our skins, just go to the skin folder (https://github.com/spheras/knob/tree/master/skins) and get what you need.
+
+Study the following examples to understand better how to use them: 
 
 ### Skin 1
 
@@ -304,5 +311,144 @@ export class AppComponent {
 }
 ```
 
+### Skin 4
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob4.gif)
+
+
+```javascript
+import { Component, NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
+@Component({
+    selector: 'my-app',
+    styles: [`
+    h3{
+        color:red;
+    }
+    .container{
+        width: 144px;
+        overflow: hidden;
+        border: 7px solid #FAFAFA;
+        padding: 20px;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+        background: #272727;
+        float:left;
+        margin:40px;
+    }
+    .container.freq{
+        background: #F0F0F0;
+        width: 248px;
+    }
+    .info.freq{
+        font-family: monospace;
+        text-align: center;
+        font-weight: bold;
+        font-size: 36px;
+        text-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    }
+    knob{
+        background-size:contain;
+        margin-left: 20px;
+        width:100px;
+        height:100px;
+        display:block;
+    }
+    knob.skin4{
+        background:url('skins/skin4_back.svg');
+        background-size: contain;    
+        width:200px;
+        height:200px;
+    }
+    knob.skin4 /deep/ .knob{
+        background:url('skins/skin4_front.svg');
+        background-size: contain;    
+        width:200px;
+        height:200px;
+    }
+        `],
+    template: `
+  <h3>Angular 2 Knob Component</h3>
+    <div class="container freq">
+        <knob class="skin4" #myknob4 [min]="-6" [max]="6" [value]="3" [startDegree]="228"  [endDegree]="130"></knob>
+        <div class="info freq">{{myknob4.meterValue}} freq</div>
+    </div>
+      `,
+})
+export class AppComponent {
+
+}
+```
+
+
+### Skin 5
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob5.gif)
+
+
+```javascript
+import { Component, NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
+@Component({
+    selector: 'my-app',
+    styles: [`
+    h3{
+        color:red;
+    }
+    .container{
+        width: 144px;
+        overflow: hidden;
+        border: 7px solid #FAFAFA;
+        padding: 20px;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+        background: #272727;
+        float:left;
+        margin:40px;
+    }
+    .container.freq2{
+        background: #e8ff98;
+        width: 148px;
+    }
+    .info.freq2{
+        font-family: monospace;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        text-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+    }
+    knob{
+        background-size:contain;
+        margin-left: 20px;
+        width:100px;
+        height:100px;
+        display:block;
+    }
+    knob.skin5{
+        background:url('skins/skin4_back.svg');
+        background-size: contain;    
+        width:100px;
+        height:100px;
+    }
+    knob.skin5 /deep/ .knob{
+        background:url('skins/skin5_front.svg');
+        background-size: contain;    
+        width:100px;
+        height:100px;
+    }
+        `],
+    template: `
+  <h3>Angular 2 Knob Component</h3>
+    <div class="container freq2">
+        <knob class="skin5" #myknob5 [min]="-6" [max]="6" [value]="-6" [startDegree]="228"  [endDegree]="130"></knob>
+        <div class="info freq2">{{myknob5.meterValue}} freq</div>
+    </div>
+      `,
+})
+export class AppComponent {
+
+}
+```
+
