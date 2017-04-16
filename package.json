@@ -20,7 +20,7 @@
   "types": "./index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rnadler/ng2-password-strength-bar.git"
+    "url": "git+https://github.com/spheras/knob.git"
   },
   "author": "José Amuedo",
   "license": "MIT",
