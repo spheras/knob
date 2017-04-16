@@ -3,24 +3,17 @@ import {
 } from '@angular/core';
 
 @Component({
-    template: `<div #knob class="knob">
-    <div class="knob-tick"></div>
-</div>
-<div class="knob-value">{{meterValue}}{{unit}}</div>`,
-    styles: [`.knob {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 3px solid black;
-    cursor: pointer;
-}
-
-.knob .knob-tick {
-    width: 2px;
-    height: 35%;
-    background: black;
-    margin: 0 auto;
-}`],
+    template: `
+<div #knob class="knob"></div>
+`,
+    styles: [`
+    .knob{
+        width:100%;
+        height:100%;
+        background-size: contain;
+        cursor:pointer;
+    }
+`],
     selector: 'knob'
 })
 
@@ -34,8 +27,7 @@ export class KnobComponent {
     @Input('min') min: number = 0;
     /** the maximum possible value */
     @Input('max') max: number = 0;
-    /** the unit we are measuring */
-    @Input('unit') unit: string = "cm";
+
     /** the real meter value */
     @Input('value') meterValue: number = 0;
 
@@ -44,6 +36,8 @@ export class KnobComponent {
     /** the end degree for the knob */
     @Input('endDegree') endDegree: number = 120;
 
+    /** the change event to notify the new value */
+    @Output('change') change: EventEmitter<number> = new EventEmitter<number>(false);
 
     @ViewChild('knob') knobDiv: ElementRef;
 
@@ -61,13 +55,15 @@ export class KnobComponent {
         if (document.body.clientWidth > this.maxDistance) {
             this.maxDistance = document.body.clientWidth;
         }
-        this.maxDistance = (this.maxDistance * 20) / 100;
+        this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
 
     ngAfterViewInit() {
         var self = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e: any) { self.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', function (e: any) { self.setChangeListener(e); });
+        //this.knobDiv.nativeElement.style.background = "url('" + this.background + "')";
+        //this.knobDiv.nativeElement.style.backgroundSize = "contain";
         this.calculateInitialValue();
     }
 
@@ -79,7 +75,8 @@ export class KnobComponent {
     getMouseDifference(e: any) {
         var mousepos = this.getMousePosition(e);
         var yMovement = mousepos.clientY - this.startY;
-        return yMovement;
+        var xMovement = mousepos.clientX - this.startX;
+        return yMovement + xMovement;
     }
 
     /**
@@ -126,13 +123,15 @@ export class KnobComponent {
             newValue = maxDegrees;
         }
         this.tmpMeterRotation = newValue;
-        console.log(this.tmpMeterRotation);
+        //console.log(this.tmpMeterRotation);
 
         this.knobDiv.nativeElement.style.transform = "rotate(" + (newValue + this.startDegree) + "deg)";
 
         this.meterValue = (100 * newValue) / maxDegrees;
         var norm = this.max - this.min;
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
+
+        this.change.emit(this.meterValue);
     }
 
     /**
@@ -157,15 +156,22 @@ export class KnobComponent {
      * @param {MouseEvent or TouchEvent} e event
      */
     setChangeListener(e: any) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (e.preventDefault) e.preventDefault();
+
         var self = this;
         var mousepos = this.getMousePosition(e);
         this.startX = mousepos.clientX;
         this.startY = mousepos.clientY;
         var funcMove = function (e: any) {
+            if (e.stopPropagation) e.stopPropagation();
+            if (e.preventDefault) e.preventDefault();
             var change = self.getMouseDifference(e);
             self.calculateChange(change);
         }
         var funcRemove = function (e: any) {
+            if (e.stopPropagation) e.stopPropagation();
+            if (e.preventDefault) e.preventDefault();
             self.startX = 0;
             self.startY = 0;
             self.meterRotation = self.tmpMeterRotation;
