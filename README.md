@@ -11,7 +11,7 @@ The following is an example of what you can achieve with this component:
   
 ## Getting Started  
 
-## Instaling the Component
+## Installing the Component
 First of all you'll need to add it to your project as a dependency, i.e. with npm:
 
 `npm install ng2-knob --save`
@@ -19,7 +19,7 @@ First of all you'll need to add it to your project as a dependency, i.e. with np
 ## Using the Component
 Using Knob widget is pretty simple. First, import the component inside the module of your Angular Application, like this:
 
-```
+```javascript
 import { KnobModule } from 'ng2-knob';
 ...
 @NgModule({
@@ -37,10 +37,10 @@ import { KnobModule } from 'ng2-knob';
 })
 export class AppModule {}
 ```
-## Add Component to your Application
+## Add the Component to your Application
 To start working with the new component, add it to the html part of the component you desire:
 
-```
+```javascript
 @Component({
     selector: 'my-app',
     template: `
@@ -86,7 +86,7 @@ To use correctly the knob, you will need probably a container and a div (like in
 
 The component emit an event at every change value of the knob. You can listen to these events using the **change** property with the **$event** property received.
 
-```
+```javascript
  <knob class="skin1" #myknob1 [min]="10" [max]="200" [value]="80" [startDegree]="200"  [endDegree]="120" (change)="console.log($event);"></knob>
 ```
 
@@ -102,8 +102,207 @@ The component emit an event at every change value of the knob. You can listen to
 
 ## Examples
 
+### Skin 1
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob1.gif)
+
+
+```javascript
+import { Component, NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
+@Component({
+    selector: 'my-app',
+    styles: [`
+    h3{
+        color:red;
+    }
+    .container{
+        width: 144px;
+        overflow: hidden;
+        border: 7px solid #FAFAFA;
+        padding: 20px;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+        background: #272727;
+        float:left;
+        margin:40px;
+    }
+    .info.bpm{
+        font-size: 2em;
+        border: 1px solid #555555;
+        width: 141px;
+        margin-top: 22px;
+        box-shadow: inset 0px 0px 11px rgba(0,0,0,1);
+        background: #c3dac9;
+        text-align: center;
+        font-family: monospace;
+        border-radius: 7px;
+        color: #333333;
+    }
+    knob{
+        background-size:contain;
+        margin-left: 20px;
+        width:100px;
+        height:100px;
+        display:block;
+    }
+    knob.skin1{
+        background:url('skins/skin1_back.svg');
+       background-size: contain;    
+    }
+    knob.skin1 /deep/ .knob{
+        background:url('skins/skin1_front.svg');
+        background-size: contain;    
+    }
+        `],
+    template: `
+  <h3>Angular 2 Knob Component</h3>
+    <div class="container">
+        <knob class="skin1" #myknob1 [min]="10" [max]="200" [value]="80" [startDegree]="200"  [endDegree]="120"></knob>
+        <div class="info bpm">{{myknob1.meterValue}} bpm</div>
+    </div>
+      `,
+})
+export class AppComponent {
+
+}
+```
+
+### Skin 2
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob2.gif)
+
+
+```javascript
+import { Component, NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
+@Component({
+    selector: 'my-app',
+    styles: [`
+    h3{
+        color:red;
+    }
+    .container{
+        width: 144px;
+        overflow: hidden;
+        border: 7px solid #FAFAFA;
+        padding: 20px;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+        background: #272727;
+        float:left;
+        margin:40px;
+    }
+    .container.cm{
+        background: #444444;
+    }
+    .info.cm{
+        color: #AAAAAA;
+        font-family: monospace;
+        text-align: center;
+        margin-top: 7px;
+        font-weight: bold;
+    }
+    knob{
+        background-size:contain;
+        margin-left: 20px;
+        width:100px;
+        height:100px;
+        display:block;
+    }
+    knob.skin2{
+        background:url('skins/skin2_back.svg');
+        background-size: contain;    
+    }
+    knob.skin2 /deep/ .knob{
+        background:url('skins/skin2_front.svg');
+        background-size: contain;    
+    }
+        `],
+    template: `
+  <h3>Angular 2 Knob Component</h3>
+    <div class="container cm">
+        <knob class="skin2" #myknob2 [min]="0" [max]="500" [value]="30" [startDegree]="0"  [endDegree]="360"></knob>
+        <div class="info cm">{{myknob2.meterValue}} cm</div>
+    </div>
+      `,
+})
+export class AppComponent {
+
+}
+```
+
+### Skin 3
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob3.gif)
+
+
+```javascript
+import { Component, NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+
+@Component({
+    selector: 'my-app',
+    styles: [`
+    h3{
+        color:red;
+    }
+    .container{
+        width: 144px;
+        overflow: hidden;
+        border: 7px solid #FAFAFA;
+        padding: 20px;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+        background: #272727;
+        float:left;
+        margin:40px;
+    }
+    .container.degree{
+        background: #F0F0F0;
+        width: 350px;
+    }
+    .info.degree{
+        color: #888888;
+        font-family: monospace;
+        text-align: center;
+        margin-top: 7px;
+        font-size: 20px;
+    }
+    knob{
+        background-size:contain;
+        margin-left: 20px;
+        width:100px;
+        height:100px;
+        display:block;
+    }
+    knob.skin3{
+        background:url('skins/skin3_back.svg');
+        background-size: contain;    
+        width:300px;
+        height:300px;
+    }
+    knob.skin3 /deep/ .knob{
+        background:url('skins/skin3_front.svg');
+        background-size: contain;    
+        width:300px;
+        height:300px;
+    }
+        `],
+    template: `
+  <h3>Angular 2 Knob Component</h3>
+    <div class="container degree">
+        <knob class="skin3" #myknob3 [min]="0" [max]="100" [value]="45" [startDegree]="0"  [endDegree]="360"></knob>
+        <div class="info degree">{{myknob3.meterValue}} º</div>
+    </div>
+      `,
+})
+export class AppComponent {
+
+}
+```
+
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob4.gif)
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob5.gif)
