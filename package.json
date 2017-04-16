@@ -1,6 +1,6 @@
 {
   "name": "ng2-knob",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Angular 2 Knob Component",
   "scripts": {
     "start": "npm run build && concurrently \"tsc -w\" \"lite-server\" ",
