@@ -1,9 +1,9 @@
 # Knob Widget
 
-Knob is an Angular component to set values with the typical Knob control (for instance, very used in music hardware).  The 
+Knob is an [Angular](https://github.com/angular/angular) component to set values with the typical Knob control (for instance, very used in music hardware).  The 
 component is very basic, you just need to configure the range of values admited, and the degrees the knob can manage. This component doesn't suply any skin by itself but you can find some example skins here too: https://github.com/spheras/knob/tree/master/skins  
 
-The following is an example of what you can achieve with this component:
+The following are two examples of what you can achieve with this component:
 
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob5.gif)  
 ![alt tag](https://raw.githubusercontent.com/spheras/knob/master/etc/knob3.gif)
