@@ -36,6 +36,10 @@ export class KnobComponent {
     /** the end degree for the knob */
     @Input('endDegree') endDegree: number = 120;
 
+
+    /** if the emition of events is intensive or not */
+    @Input('intensive') intensive: boolean = true;
+
     /** the change event to notify the new value */
     @Output('change') change: EventEmitter<number> = new EventEmitter<number>(false);
 
@@ -138,7 +142,9 @@ export class KnobComponent {
         var norm = this.max - this.min;
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
 
-        this.change.emit(this.meterValue);
+        if (this.intensive) {
+            this.change.emit(this.meterValue);
+        }
     }
 
     /**
@@ -177,6 +183,9 @@ export class KnobComponent {
             self.calculateChange(change);
         }
         var funcRemove = function (e: any) {
+            if (!self.intensive) {
+                self.change.emit(this.meterValue);
+            }
             if (e.stopPropagation) e.stopPropagation();
             if (e.preventDefault) e.preventDefault();
             self.startX = 0;

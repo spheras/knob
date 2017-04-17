@@ -82,6 +82,10 @@ To use correctly the knob, you will need probably a container and a div (like in
 
 - The knob rotate from a start degree to an end degree. This is the **end** degree.
 
+### intensive (type: boolean)
+
+- true (default) if you want to be notified on each small change by the change event. If not, you will be notified only after the end of modification.
+
 ## Public Methods
 
 ### setInitialValue (value: number)
