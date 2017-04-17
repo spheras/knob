@@ -61,26 +61,42 @@ To use correctly the knob, you will need probably a container and a div (like in
 
 \<knob \[**min**\]="0"  \[**max**\]="100"\ \[**value**\]="50"\ \[**startDegree**\]="0"\ \[**endDegree**\]="120"\> \</knob>
 
-#### min (type: number)
+### min (type: number)
 
 - The minimum value you need for the range of values [min,max]
 
-#### max (type: number)
+### max (type: number)
 
 - The maximum value you need for the range of values [min,max]
 
-#### value (type: number)
+### value (type: number)
 
 - The starting value you want for the knob. Consider to put a value between min and max.
 
-#### startDegree (type: number)
+### startDegree (type: number)
 
 - The knob rotate from a start degree to an end degree. This is the **start** degree.
 
 
-#### endDegree (type: number)
+### endDegree (type: number)
 
 - The knob rotate from a start degree to an end degree. This is the **end** degree.
+
+## Public Methods
+
+### setInitialValue (value: number)
+
+- If you need to set the initial value by code, or set a value by code you can do it calling this function. Don't forget to pass a value between the range **[min,max]**.
+Example:
+
+```javascript
+ @ViewChild('myKnob1') knob: KnobComponent;
+
+ doSomething() {
+    let someValue:number=50;
+    this.knob.setInitialValue(someValue);
+ }
+```
 
 ## Output Events
 

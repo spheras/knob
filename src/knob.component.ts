@@ -62,8 +62,6 @@ export class KnobComponent {
         var self = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e: any) { self.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', function (e: any) { self.setChangeListener(e); });
-        //this.knobDiv.nativeElement.style.background = "url('" + this.background + "')";
-        //this.knobDiv.nativeElement.style.backgroundSize = "contain";
         this.calculateInitialValue();
     }
 
@@ -91,6 +89,15 @@ export class KnobComponent {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * @name setInitialValue
+     * @description set the initial value of the component
+     */
+    public setInitialValue(value: number) {
+        this.meterValue = value;
+        this.calculateInitialValue();
     }
 
     /**
