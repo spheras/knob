@@ -184,7 +184,7 @@ export class KnobComponent {
         }
         var funcRemove = function (e: any) {
             if (!self.intensive) {
-                self.change.emit(this.meterValue);
+                self.change.emit(self.meterValue);
             }
             if (e.stopPropagation) e.stopPropagation();
             if (e.preventDefault) e.preventDefault();
