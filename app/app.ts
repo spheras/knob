@@ -34,6 +34,9 @@ import { KnobModule } from '../index';
     .container.cm{
         background: #444444;
     }
+    .input.cm{
+      width: 30px;
+    }
     .info.bpm{
         font-size: 2em;
         border: 1px solid #555555;
@@ -137,29 +140,35 @@ import { KnobModule } from '../index';
     template: `
   <h3>Angular 2 Knob Component</h3>
     <div class="container">
-        <knob class="skin1" #myknob1 [min]="10" [max]="200" [value]="80" [startDegree]="200"  [endDegree]="120"></knob>
-        <div class="info bpm">{{myknob1.meterValue}} bpm</div>
+        <knob class="skin1" [min]="10" [max]="200" [startDegree]="200"  [endDegree]="120" [(ngModel)]="myknob1_meterValue"></knob>
+      <div class="info bpm">{{myknob1_meterValue}} bpm</div>
+      <button (click)="myknob1_meterValue = 150">Set 150</button>
     </div>
     <div class="container cm">
-        <knob class="skin2" #myknob2 [min]="0" [max]="500" [value]="30" [startDegree]="0"  [endDegree]="360"></knob>
-        <div class="info cm">{{myknob2.meterValue}} cm</div>
+        <knob class="skin2" [min]="0" [max]="500" [startDegree]="0"  [endDegree]="360" [(ngModel)]="myknob2_meterValue"></knob>
+      <div class="info cm">{{myknob2_meterValue}} cm</div>
+      <input class="input cm" [(ngModel)]="myknob2_meterValue">
     </div>
     <div class="container degree">
-        <knob class="skin3" #myknob3 [min]="0" [max]="100" [value]="45" [startDegree]="0"  [endDegree]="360"></knob>
-        <div class="info degree">{{myknob3.meterValue}} º</div>
+        <knob class="skin3" [min]="0" [max]="100" [startDegree]="0"  [endDegree]="360" [(ngModel)]="myknob3_meterValue"></knob>
+        <div class="info degree">{{myknob3_meterValue}} º</div>
     </div>
     <div class="container freq">
-        <knob class="skin4" #myknob4 [min]="-6" [max]="6" [value]="3" [startDegree]="228"  [endDegree]="130"></knob>
-        <div class="info freq">{{myknob4.meterValue}} freq</div>
+        <knob class="skin4" [min]="-6" [max]="6" [startDegree]="228"  [endDegree]="130" [(ngModel)]="myknob4_meterValue"></knob>
+        <div class="info freq">{{myknob4_meterValue}} freq</div>
     </div>
     <div class="container freq2">
-        <knob class="skin5" #myknob5 [min]="-6" [max]="6" [value]="-6" [startDegree]="228"  [endDegree]="130"></knob>
-        <div class="info freq2">{{myknob5.meterValue}} freq</div>
+        <knob class="skin5" [min]="-6" [max]="6" [startDegree]="228"  [endDegree]="130" [(ngModel)]="myknob4_meterValue"></knob>
+        <div class="info freq2">{{myknob4_meterValue}} freq</div>
     </div>
       `,
 })
 export class AppComponent {
-
+  private myknob1_meterValue: number = 80;
+  private myknob2_meterValue: number = 30;
+  private newKnob2Value: number = 140;
+  private myknob3_meterValue: number = 45;
+  private myknob4_meterValue: number = 3;
 }
 
 @NgModule({
