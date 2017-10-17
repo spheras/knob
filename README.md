@@ -109,6 +109,16 @@ The component emit an event at every change value of the knob. You can listen to
 ```javascript
  <knob class="skin1" #myknob1 [min]="10" [max]="200" [value]="80" [startDegree]="200"  [endDegree]="120" (change)="console.log($event);"></knob>
 ```
+## Double Binding ngModel
+
+You can use the component just binding the value with the ngModel property.  This way, you'll probably don't need the **change** event or **setInitialValue** or **value** property. For instance:
+
+```javascript
+<knob class="skin1" [min]="10" [max]="200" [startDegree]="200"  [endDegree]="120" [(ngModel)]="myknob1_meterValue"></knob>
+<div class="info bpm">{{myknob1_meterValue}} bpm</div>
+<button (click)="myknob1_meterValue = 150">Set 150</button>
+```
+In this example, the knob is linked with the myknob1_metervalue variable from your controller. Whenever the knob change its value, or the variable is modified, everything will be updated.
 
 ## Run the example application locally
 - `git clone https://github.com/spheras/knob.git`
