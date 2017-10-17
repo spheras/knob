@@ -84,6 +84,18 @@ import { KnobModule } from '../index';
         height:100px;
         display:block;
     }
+    knob.skin0{
+        background:url('skins/skin1_back.svg');
+       background-size: contain;    
+       width:120px;
+       height:120px;
+   }
+    knob.skin0 /deep/ .knob{
+        background:url('skins/skin1_front.svg');
+        background-size: contain;    
+        width:120px;
+        height:120px;
+    }
     knob.skin1{
         background:url('skins/skin1_back.svg');
        background-size: contain;    
@@ -139,11 +151,18 @@ import { KnobModule } from '../index';
         `],
     template: `
   <h3>Angular 2 Knob Component</h3>
+
+    <div class="container">
+        <knob class="skin0" #myknob1 [min]="20" [max]="100" [value]="50" [startDegree]="200"  [endDegree]="280" (change)="debug($event)"></knob>
+        <div class="info bpm">{{myknob1.meterValue}} bpm</div>    
+    </div>
+
     <div class="container">
         <knob class="skin1" [min]="10" [max]="200" [startDegree]="200"  [endDegree]="120" [(ngModel)]="myknob1_meterValue"></knob>
       <div class="info bpm">{{myknob1_meterValue}} bpm</div>
       <button (click)="myknob1_meterValue = 150">Set 150</button>
     </div>
+
     <div class="container cm">
         <knob class="skin2" [min]="0" [max]="500" [startDegree]="0"  [endDegree]="360" [(ngModel)]="myknob2_meterValue"></knob>
       <div class="info cm">{{myknob2_meterValue}} cm</div>
@@ -164,11 +183,16 @@ import { KnobModule } from '../index';
       `,
 })
 export class AppComponent {
-  private myknob1_meterValue: number = 80;
-  private myknob2_meterValue: number = 30;
-  private newKnob2Value: number = 140;
-  private myknob3_meterValue: number = 45;
-  private myknob4_meterValue: number = 3;
+    private myknob1_meterValue: number = 80;
+    private myknob2_meterValue: number = 30;
+    private newKnob2Value: number = 140;
+    private myknob3_meterValue: number = 45;
+    private myknob4_meterValue: number = 3;
+
+
+    debug(event: string) {
+        console.log("event change:" + event);
+    }
 }
 
 @NgModule({

@@ -44,8 +44,12 @@ export class KnobComponent implements ControlValueAccessor {
 
     @ViewChild('knob') knobDiv: ElementRef;
 
+    /** the real meter value */
+    @Input('value') meterValue: number = 0;
 
-    private meterValue: number = 0;
+    /** the change event to notify the new value */
+    @Output('change') change: EventEmitter<number> = new EventEmitter<number>(false);
+
   /** the current rotation persisted (not persisted until the touch/mouse down is released) */
     private meterRotation: number = 0;
     /** the temporal meter rotation we have until the touch/mousedown is released */
@@ -67,10 +71,11 @@ export class KnobComponent implements ControlValueAccessor {
         this.maxDistance = Math.round((this.maxDistance * 10) / 100);
     }
 
-    ngAfterViewInit() {
+    ngOnInit() {
         var self = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e: any) { self.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', function (e: any) { self.setChangeListener(e); });
+        this.calculateDialAngle();
     }
 
     /**
@@ -139,6 +144,7 @@ export class KnobComponent implements ControlValueAccessor {
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
 
         if (this.intensive) {
+            this.change.emit(this.meterValue);
             this.notifyChange();
         }
     }
@@ -180,6 +186,7 @@ export class KnobComponent implements ControlValueAccessor {
         }
         var funcRemove = function (e: any) {
             if (!self.intensive) {
+                self.change.emit(self.meterValue);
                 self.notifyChange();
             }
             if (e.stopPropagation) e.stopPropagation();
