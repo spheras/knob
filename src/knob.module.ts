@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { KnobComponent } from './knob.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
-    imports: [ ],
+    imports: [ FormsModule ],
     declarations: [ KnobComponent ],
     exports: [ KnobComponent ],
 })

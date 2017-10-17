@@ -1,6 +1,7 @@
 import {
-    Component, Input, Output, EventEmitter, ViewChild, ElementRef
+  Component, Input, Output, EventEmitter, ViewChild, ElementRef, forwardRef
 } from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
     template: `
@@ -14,7 +15,12 @@ import {
         cursor:pointer;
     }
 `],
-    selector: 'knob'
+    selector: 'knob',
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => KnobComponent),
+    multi: true
+  }]
 })
 
 /**
@@ -22,30 +28,25 @@ import {
  * @name KnobComponent
  * @description a knob component based on https://github.com/joedotjs/ngKnob/blob/master/dist/ngKnob.js
  */
-export class KnobComponent {
-    /** the minimum possible value */
+export class KnobComponent implements ControlValueAccessor {
+  /** the minimum possible value */
     @Input('min') min: number = 0;
     /** the maximum possible value */
     @Input('max') max: number = 0;
-
-    /** the real meter value */
-    @Input('value') meterValue: number = 0;
 
     /** the start degree for the knob */
     @Input('startDegree') startDegree: number = 200;
     /** the end degree for the knob */
     @Input('endDegree') endDegree: number = 120;
 
-
     /** if the emition of events is intensive or not */
     @Input('intensive') intensive: boolean = true;
 
-    /** the change event to notify the new value */
-    @Output('change') change: EventEmitter<number> = new EventEmitter<number>(false);
-
     @ViewChild('knob') knobDiv: ElementRef;
 
-    /** the current rotation persisted (not persisted until the touch/mouse down is released) */
+
+    private meterValue: number = 0;
+  /** the current rotation persisted (not persisted until the touch/mouse down is released) */
     private meterRotation: number = 0;
     /** the temporal meter rotation we have until the touch/mousedown is released */
     private tmpMeterRotation: number = 0;
@@ -53,6 +54,10 @@ export class KnobComponent {
     private startY: number = 0;
     //this is the max distance calculated to complete the 360º
     private maxDistance: number = 0;
+
+    /** 2-way binding listeners **/
+    private changed: any[] = [];
+    private touched: any[] = [];
 
     constructor() {
         this.maxDistance = document.body.clientHeight;
@@ -66,13 +71,12 @@ export class KnobComponent {
         var self = this;
         this.knobDiv.nativeElement.addEventListener('mousedown', function (e: any) { self.setChangeListener(e); });
         this.knobDiv.nativeElement.addEventListener('touchstart', function (e: any) { self.setChangeListener(e); });
-        this.calculateInitialValue();
     }
 
     /**
      * @name getMouseDifference
      * @description get the mouse difference between the start down position and the current position
-     * @param 
+     * @param
      */
     getMouseDifference(e: any) {
         var mousepos = this.getMousePosition(e);
@@ -96,32 +100,24 @@ export class KnobComponent {
     }
 
     /**
-     * @name setInitialValue
-     * @description set the initial value of the component
-     */
-    public setInitialValue(value: number) {
-        this.meterValue = value;
-        this.calculateInitialValue();
-    }
-
-    /**
-     * @name calculateInitialValue
+     * @name calculateDialAngle
      * @description calculate the initial rotation based on the value we have initially
      */
-    private calculateInitialValue() {
+    private calculateDialAngle() {
         let norm: number = this.meterValue - this.min;
         let percent = norm * 100 / (this.max - this.min);
         let maxdeg = this.getMaxDegrees();
         let rot = percent * maxdeg / 100;
         this.meterRotation = rot % 360;
         rot = rot + this.startDegree;
-        this.knobDiv.nativeElement.style.transform = "rotate(" + (rot) + "deg)";
+        this.knobDiv.nativeElement.style.transform = 'rotate(' + (rot) + 'deg)';
+      this.notifyChange();
     }
 
     /**
      * @name calculateChange
      * @description calculates the difference of the knob after a movement of the mouse/finger and render correctly the knob
-     * @param {number} mousePositionChange the difference respect the original position when mousedown/touchstart events 
+     * @param {number} mousePositionChange the difference respect the original position when mousedown/touchstart events
      */
     calculateChange(mousePositionChange: number) {
         var maxDegrees = this.getMaxDegrees();
@@ -136,14 +132,14 @@ export class KnobComponent {
         this.tmpMeterRotation = newValue;
         //console.log(this.tmpMeterRotation);
 
-        this.knobDiv.nativeElement.style.transform = "rotate(" + (newValue + this.startDegree) + "deg)";
+        this.knobDiv.nativeElement.style.transform = 'rotate(' + (newValue + this.startDegree) + 'deg)';
 
         this.meterValue = (100 * newValue) / maxDegrees;
         var norm = this.max - this.min;
         this.meterValue = Math.round(((norm * this.meterValue) / 100) + this.min);
 
         if (this.intensive) {
-            this.change.emit(this.meterValue);
+            this.notifyChange();
         }
     }
 
@@ -184,7 +180,7 @@ export class KnobComponent {
         }
         var funcRemove = function (e: any) {
             if (!self.intensive) {
-                self.change.emit(self.meterValue);
+                self.notifyChange();
             }
             if (e.stopPropagation) e.stopPropagation();
             if (e.preventDefault) e.preventDefault();
@@ -203,4 +199,50 @@ export class KnobComponent {
         document.addEventListener('touchend', funcRemove, false);
     }
 
+  /**
+   * @name writeValue
+   * @description write new value to the model
+   * @param {New value} obj any
+   */
+  writeValue(obj: any): void {
+    if (obj == null)
+      return;
+
+    this.meterValue = obj;
+    this.calculateDialAngle();
+  }
+
+  /**
+   * @name registerOnChange
+   * @description register new onChange event listener
+   * @param {method to call} fn any
+   */
+  registerOnChange(fn: any): void {
+    this.changed.push(fn);
+  }
+
+  /**
+   * @name notifyChange
+   * @description notify touch listeners when touched
+   */
+  notifyChange() {
+    this.changed.forEach(f => f(this.meterValue));
+  }
+
+  /**
+   * @name registerOnTouched
+   * @description register new onTouched event listener
+   * @param {method to call} fn any
+   */
+  registerOnTouched(fn: any): void {
+    this.touched.push(fn);
+  }
+
+  /**
+   * @name notifyTouch
+   * @description notify touch listeners when touched
+   */
+  notifyTouch() {
+    this.touched.forEach(f => f());
+  }
 }
